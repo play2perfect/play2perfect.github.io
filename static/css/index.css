@@ -1,3 +1,8 @@
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   color: #1f2933;
   font-family: "Times New Roman", Times, serif;
@@ -81,7 +86,7 @@ a {
   max-width: calc(100vw - 2rem);
   margin: 0 auto;
   color: #fff;
-  font-size: clamp(2.6rem, 6vw, 6.7rem);
+  font-size: 6rem;
   line-height: 0.96;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.85);
 }
@@ -91,7 +96,7 @@ a {
   width: min(980px, calc(100vw - 2rem));
   max-width: calc(100vw - 2rem);
   margin-top: 0.35rem;
-  font-size: clamp(1.7rem, 3.2vw, 3.4rem);
+  font-size: 3rem;
   font-weight: 400 !important;
   line-height: 1.07;
   white-space: normal;
@@ -285,6 +290,16 @@ a {
   font-weight: 400 !important;
 }
 
+@media screen and (max-width: 1200px) {
+  .hero-title {
+    font-size: 5rem;
+  }
+
+  .hero-title span {
+    font-size: 2.5rem;
+  }
+}
+
 @media screen and (max-width: 900px) {
   .hero-banner {
     aspect-ratio: auto;
@@ -297,13 +312,14 @@ a {
 
   .hero-title {
     margin-bottom: 0.9rem !important;
-    font-size: clamp(2.1rem, 10vw, 2.8rem);
+    font-size: 2.6rem;
     line-height: 1.02;
   }
 
   .hero-title span {
-    max-width: 28rem;
-    font-size: clamp(1.25rem, 5.6vw, 1.9rem);
+    width: min(22rem, calc(100vw - 2rem));
+    max-width: calc(100vw - 2rem);
+    font-size: 1.42rem;
     line-height: 1.08;
   }
 
@@ -337,5 +353,31 @@ a {
     width: 100%;
     justify-content: center;
     white-space: normal;
+  }
+
+  .publication-links {
+    max-width: 17.5rem;
+  }
+
+  .publication-links .button {
+    min-width: 7.25rem;
+    justify-content: center;
+  }
+
+  .content.has-text-justified,
+  .method-copy {
+    text-align: left !important;
+    text-align-last: auto;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .hero-title {
+    font-size: 2.35rem;
+  }
+
+  .hero-title span {
+    width: min(18.5rem, calc(100vw - 2rem));
+    font-size: 1.08rem;
   }
 }
