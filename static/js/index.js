@@ -20,11 +20,12 @@ function switchAssemblyVideo(btn) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  var container = document.querySelector(".showcase-video");
-  var video = document.getElementById("showcase-video");
-  var overlay = document.getElementById("sound-overlay");
+  function setupSoundOverlay(containerSelector, videoId, overlayId) {
+    var container = document.querySelector(containerSelector);
+    var video = document.getElementById(videoId);
+    var overlay = document.getElementById(overlayId);
+    if (!container || !video || !overlay) return;
 
-  if (container && video && overlay) {
     var overlayDismissed = false;
     var overlayTimer = null;
 
@@ -80,6 +81,9 @@ document.addEventListener("DOMContentLoaded", function () {
       dismissOverlay(true);
     });
   }
+
+  setupSoundOverlay(".showcase-video", "showcase-video", "sound-overlay");
+  setupSoundOverlay(".recovery-video-container", "recovery", "recovery-sound-overlay");
 
   var lazyVideos = document.querySelectorAll("video.lazy-video");
 

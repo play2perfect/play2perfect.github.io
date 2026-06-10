@@ -162,6 +162,27 @@
     </div>
   </section>
 
+  <section class="section recovery-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">Recovery Behavior (Sound On 🔊)</h2>
+          <h2 class="subtitle is-5">
+            Even after an initial failure, the policy continues acting closed-loop: continuously retrying until it completes the task.
+          </h2>
+          <div class="recovery-video-container sound-video">
+            <div class="sound-overlay" id="recovery-sound-overlay">
+              <span class="sound-overlay-text">Turn sound on</span>
+            </div>
+            <video id="recovery" muted controls loop playsinline webkit-playsinline preload="auto">
+              <source src="./static/videos/recovery.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
@@ -263,24 +284,6 @@
           <div class="method-video-container">
             <video id="zero-shot-real" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
               <source src="./static/videos/zero_shot_sim_to_real.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section recovery-section">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column">
-          <h2 class="title is-2">Recovery Behavior</h2>
-          <h2 class="subtitle is-5">
-            Even after an initial failure, the policy continues acting closed-loop: continuously retrying until it completes the task.
-          </h2>
-          <div class="recovery-video-container">
-            <video id="recovery" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
-              <source src="./static/videos/recovery.mp4" type="video/mp4">
             </video>
           </div>
         </div>

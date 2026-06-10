@@ -168,6 +168,10 @@ a {
   cursor: pointer;
 }
 
+.sound-video {
+  cursor: pointer;
+}
+
 .sound-overlay {
   position: absolute;
   inset: 0;
