@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Play2Perfect studies what matters in dexterous play pretraining for precise assembly with multi-fingered robot hands.">
+  <meta name="keywords" content="Play2Perfect, dexterous manipulation, play pretraining, precise assembly, sim-to-real">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Play2Perfect</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4GHT8PVEGV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4GHT8PVEGV');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script defer src="./static/js/index.js"></script>
+</head>
+
+<body>
+  <section class="hero is-link hero-banner">
+    <div class="hero-bg-video" aria-hidden="true">
+      <video playsinline webkit-playsinline autoplay muted loop preload="auto">
+        <source src="./static/videos/hero_teaser.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+
+    <div class="hero-head is-hidden-mobile">
+      <header class="navbar">
+        <div class="container is-size-5">
+          <div class="navbar-menu">
+            <div class="navbar-end">
+              <a class="navbar-item hero-link" href="./">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+              <a class="navbar-item hero-link" href="./">
+                <span class="icon"><i class="fab fa-youtube"></i></span>
+                <span>Video</span>
+              </a>
+              <a class="navbar-item hero-link" href="./">
+                <span class="icon"><i class="fab fa-twitter"></i></span>
+                <span>Thread</span>
+              </a>
+              <span class="navbar-item">
+                <a href="./" class="button is-inverted is-large hero-code-button">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title publication-title hero-title">
+          Play2Perfect<br>
+          <span>What Matters in Dexterous Play Pretraining for Precise Assembly?</span>
+        </h1>
+
+        <!--
+        TODO: Uncomment when author and conference information are ready.
+        <p class="publication-authors hero-authors">
+          <a href="https://tylerlum.github.io/">Tyler Ga Wei Lum<sup>*</sup></a>,
+          <a href="https://kushal2000.github.io/">Kushal Kedia<sup>*</sup></a>,
+          <a href="https://tml.stanford.edu/people/karen-liu">C. Karen Liu<sup>†</sup></a>,
+          <a href="https://web.stanford.edu/~bohg/">Jeannette Bohg<sup>†</sup></a>
+        </p>
+        <p class="hero-affiliation">Stanford University</p>
+        <p class="hero-notes">
+          <sup>*</sup> Equal contribution &nbsp;&nbsp; <sup>†</sup> Equal advising
+        </p>
+        <p class="hero-venue">Conference on Robot Learning (CoRL) 2026</p>
+        -->
+
+        <div class="column has-text-centered is-hidden-tablet">
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="./" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="./" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-youtube"></i></span>
+                <span>Video</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="./" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-twitter"></i></span>
+                <span>Thread</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="./" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="subtitle is-5 video-speed-note"><em>All videos are 1× speed (60 Hz control).</em></p>
+
+  <section class="section challenge-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">What Makes Dexterous Assembly Challenging?</h2>
+          <p class="subtitle is-5 section-copy">
+            Precise assembly is sparse-reward and contact-rich: the robot must learn grasping,
+            in-hand reorientation, alignment, and tight insertion.
+          </p>
+          <div class="annotated-video-container">
+            <video id="assembly-challenge" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
+              <source src="./static/videos/screwing_task_annotated.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section showcase-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">Play2Perfect Assembly Tasks (Sound On 🔊)</h2>
+          <h2 class="subtitle is-5">Dexterous play pretraining enables precise assembly across tight insertion, multi-part assembly, and screwing.</h2>
+          <div class="showcase-video">
+            <div class="sound-overlay" id="sound-overlay">
+              <span class="sound-overlay-text">Turn sound on</span>
+            </div>
+            <video id="showcase-video" muted controls loop playsinline webkit-playsinline preload="auto">
+              <source src="./static/videos/play2perfect_assembly_tasks_audio.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-2">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Multi-fingered robots promise the speed and dexterity of human hands, yet challenging problems such as precise assembly have remained out of reach. These tasks are contact-rich, making data collection for imitation learning difficult, and sparse-reward, making direct exploration with reinforcement learning (RL) intractable. Consequently, prior work has made progress by structuring the problem with specialized grippers, tool attachments, and environment fixtures. In this work, we argue that before a robot can perfect precise assembly, it must first learn to play. We further ask the question: what factors in the process of learning to play matter for precise assembly? We propose Play2Perfect, an RL framework for task-agnostic pretraining through play on diverse objects and goals, which is then perfected on precise assembly. The goal of play is to acquire reusable manipulation priors, such as grasping, in-hand reorientation and pose reaching. Finetuning then adapts this general prior to assembly, focusing exploration on the final contact-rich, high-precision interactions needed for success. We systematically study key design choices in play pretraining, including object diversity, training objective, trajectory diversity, and goal precision. We show that our prior is 33x more sample-efficient than RL training from scratch, even when provided with dense, multi-stage rewards. We demonstrate zero-shot sim-to-real transfer, achieving 60% success on tight insertions with only 0.5 mm contact clearance, and over 50% success on long-horizon multi-part assembly and screwing.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section assembly-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">Assembly Tasks</h2>
+          <div class="assembly-buttons">
+            <button class="assembly-btn active" data-video="./static/videos/tight_insertion.mp4" onclick="switchAssemblyVideo(this)">
+              <i class="fas fa-crosshairs"></i> Tight Insertion
+            </button>
+            <button class="assembly-btn" data-video="./static/videos/multi_part_assembly_step_1.mp4" onclick="switchAssemblyVideo(this)">
+              <i class="fas fa-layer-group"></i> Multi-Part Assembly Step 1
+            </button>
+            <button class="assembly-btn" data-video="./static/videos/multi_part_assembly_step_2.mp4" onclick="switchAssemblyVideo(this)">
+              <i class="fas fa-cubes"></i> Multi-Part Assembly Step 2
+            </button>
+            <button class="assembly-btn" data-video="./static/videos/screwing.mp4" onclick="switchAssemblyVideo(this)">
+              <i class="fas fa-screwdriver"></i> Screwing
+            </button>
+          </div>
+          <div class="assembly-video-container">
+            <video id="assembly-task-video" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
+              <source id="assembly-task-source" src="./static/videos/tight_insertion.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section method-overview-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">Method</h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section method-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">1. Play Pretraining</h2>
+          <h2 class="subtitle is-5 method-copy">
+            We train a goal-conditioned RL policy on diverse objects and goals to learn reusable manipulation priors such as grasping, in-hand reorientation, and object-pose control.
+          </h2>
+          <div class="method-video-container">
+            <video id="play-pretraining" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
+              <source src="./static/videos/play_pretraining.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section method-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">2. Assembly Finetuning</h2>
+          <h2 class="subtitle is-5 method-copy">
+            We adapt the play prior to sparse-reward precise assembly tasks, focusing on contact-rich interactions.
+          </h2>
+          <div class="method-video-container">
+            <video id="assembly-finetuning" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
+              <source src="./static/videos/assembly_finetuning.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section method-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">3. Zero-shot Sim-to-Real</h2>
+          <h2 class="subtitle is-5 method-copy">
+            We deploy the simulation-trained policy zero-shot in the real world on precise assembly tasks.
+          </h2>
+          <div class="method-video-container">
+            <video id="zero-shot-real" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
+              <source src="./static/videos/zero_shot_sim_to_real.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section recovery-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">Recovery Behavior</h2>
+          <h2 class="subtitle is-5">
+            Even after an initial failure, the policy continues acting closed-loop: continuously retrying until it completes the task.
+          </h2>
+          <div class="recovery-video-container">
+            <video id="recovery" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
+              <source src="./static/videos/recovery.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--
+  TODO: Acknowledgements are intentionally hidden until ready.
+  <section class="section" id="acknowledgements">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Acknowledgements</h2>
+      <p>TODO</p>
+    </div>
+  </section>
+  -->
+
+  <!--
+  TODO: BibTeX is intentionally hidden until the citation is ready.
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>TODO</code></pre>
+    </div>
+  </section>
+  -->
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
