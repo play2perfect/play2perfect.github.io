@@ -233,6 +233,20 @@ a {
   transition: border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease, background 0.25s ease;
 }
 
+.assembly-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+  flex: 0 0 1.8rem;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(15, 23, 42, 0.16));
+}
+
+.assembly-icon-tall {
+  width: 1.35rem;
+  flex-basis: 1.35rem;
+}
+
 .assembly-btn:hover {
   border-color: #1f8f9a;
   color: #1f8f9a;
