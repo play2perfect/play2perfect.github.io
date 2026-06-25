@@ -110,6 +110,27 @@ a {
   font-family: "Times New Roman", Times, serif;
 }
 
+.hero-authors {
+  width: min(920px, calc(100vw - 2rem));
+  margin: 1.75rem auto 0.35rem;
+  color: #fff;
+  font-size: 1.32rem;
+  line-height: 1.25;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.82);
+}
+
+.hero-authors a {
+  color: #fff;
+}
+
+.hero-notes {
+  margin-top: 0.35rem;
+  color: #fff;
+  font-size: 1.12rem;
+  line-height: 1.25;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.82);
+}
+
 .video-speed-note {
   margin-top: 0.8rem;
   color: #777;
@@ -337,6 +358,18 @@ a {
     line-height: 1.08;
   }
 
+  .hero-authors {
+    width: min(23rem, calc(100vw - 2rem));
+    margin-top: 1.05rem;
+    font-size: 1.08rem;
+    line-height: 1.28;
+  }
+
+  .hero-notes {
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
   .publication-links .button {
     margin: 0;
     padding-right: 0.9rem;
@@ -393,5 +426,14 @@ a {
   .hero-title span {
     width: min(18.5rem, calc(100vw - 2rem));
     font-size: 1.08rem;
+  }
+
+  .hero-authors {
+    width: min(21rem, calc(100vw - 2rem));
+    font-size: 1rem;
+  }
+
+  .hero-notes {
+    font-size: 0.96rem;
   }
 }
