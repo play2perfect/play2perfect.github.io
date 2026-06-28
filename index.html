@@ -164,36 +164,20 @@
     </div>
   </section>
 
-  <section class="section recovery-section">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column">
-          <h2 class="title is-2">Recovery Behavior (Sound On 🔊)</h2>
-          <h2 class="subtitle is-5">
-            Even after an initial failure, the policy continues acting closed-loop: continuously retrying until it completes the task.
-          </h2>
-          <div class="recovery-video-container sound-video">
-            <div class="sound-overlay" id="recovery-sound-overlay">
-              <span class="sound-overlay-text">Turn sound on</span>
-            </div>
-            <video id="recovery" muted controls loop playsinline webkit-playsinline preload="auto">
-              <source src="./static/videos/recovery.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="section">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-2">Abstract</h2>
-          <div class="content has-text-justified">
-            <p>
-              Multi-fingered robots promise the speed and dexterity of human hands, yet challenging problems such as precise assembly have remained out of reach. These tasks are contact-rich, making data collection for imitation learning difficult, and sparse-reward, making direct exploration with reinforcement learning (RL) intractable. Consequently, prior work has made progress by structuring the problem with specialized grippers, tool attachments, and environment fixtures. In this work, we argue that before a robot can perfect precise assembly, it must first learn to play. We further ask the question: what factors in the process of learning to play matter for precise assembly? We propose Play2Perfect, an RL framework for task-agnostic pretraining through play on diverse objects and goals, which is then perfected on precise assembly. The goal of play is to acquire reusable manipulation priors, such as grasping, in-hand reorientation and pose reaching. Finetuning then adapts this general prior to assembly, focusing exploration on the final contact-rich, high-precision interactions needed for success. We systematically study key design choices in play pretraining, including object diversity, training objective, trajectory diversity, and goal precision. We show that our prior is 33x more sample-efficient than RL training from scratch, even when provided with dense, multi-stage rewards. We demonstrate zero-shot sim-to-real transfer, achieving 60% success on tight insertions with only 0.5 mm contact clearance, and over 50% success on long-horizon multi-part assembly and screwing.
-            </p>
+        <div class="column">
+          <h2 class="title is-2">Key Idea: Learn to Play before Perfecting</h2>
+          <h2 class="subtitle is-5">
+            Play2Perfect first <em>plays</em> with diverse objects in free space to acquire reusable
+            manipulation priors&mdash;grasping, in-hand reorientation, and pose reaching&mdash;then
+            finetunes the RL policy on contact-rich, precise-assembly tasks for zero-shot sim-to-real transfer.
+          </h2>
+          <div class="method-video-container">
+            <video id="pipeline" muted loop autoplay playsinline webkit-playsinline preload="auto">
+              <source src="./static/videos/pipeline.mp4" type="video/mp4">
+            </video>
           </div>
         </div>
       </div>
@@ -229,63 +213,20 @@
     </div>
   </section>
 
-  <section class="section method-overview-section">
+  <section class="section recovery-section">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column">
-          <h2 class="title is-2">Method</h2>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section method-section">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column">
-          <h2 class="title is-3">1. Play Pretraining</h2>
-          <h2 class="subtitle is-5 method-copy">
-            We train a goal-conditioned RL policy on diverse objects and goals to learn reusable manipulation priors such as grasping, in-hand reorientation, and object-pose control.
+          <h2 class="title is-2">Recovery Behavior (Sound On 🔊)</h2>
+          <h2 class="subtitle is-5">
+            Even after an initial failure, the policy continues acting closed-loop: continuously retrying until it completes the task.
           </h2>
-          <div class="method-video-container">
-            <video id="play-pretraining" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
-              <source src="./static/videos/play_pretraining.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section method-section">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column">
-          <h2 class="title is-3">2. Assembly Finetuning</h2>
-          <h2 class="subtitle is-5 method-copy">
-            We adapt the play prior to sparse-reward precise assembly tasks, focusing on contact-rich interactions.
-          </h2>
-          <div class="method-video-container">
-            <video id="assembly-finetuning" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
-              <source src="./static/videos/assembly_finetuning.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section method-section">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column">
-          <h2 class="title is-3">3. Zero-shot Sim-to-Real</h2>
-          <h2 class="subtitle is-5 method-copy">
-            We deploy the simulation-trained policy zero-shot in the real world on precise assembly tasks.
-          </h2>
-          <div class="method-video-container">
-            <video id="zero-shot-real" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
-              <source src="./static/videos/zero_shot_sim_to_real.mp4" type="video/mp4">
+          <div class="recovery-video-container sound-video">
+            <div class="sound-overlay" id="recovery-sound-overlay">
+              <span class="sound-overlay-text">Turn sound on</span>
+            </div>
+            <video id="recovery" muted controls loop playsinline webkit-playsinline preload="auto">
+              <source src="./static/videos/recovery.mp4" type="video/mp4">
             </video>
           </div>
         </div>
