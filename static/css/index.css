@@ -200,12 +200,12 @@ a {
   top: 0;
   right: 0;
   z-index: 11;
-  padding: 10px 22px;
+  padding: 3px 14px;
   border-radius: 0;
   background: #000;
   color: #fff;
   font-family: "Times New Roman", Times, serif;
-  font-size: 1.5rem;
+  font-size: 1.9rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   pointer-events: none;
