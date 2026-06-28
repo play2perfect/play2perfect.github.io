@@ -212,6 +212,18 @@ a {
   border-radius: 0;
 }
 
+.ablation-figure {
+  width: 80vw;
+  max-width: 80vw;
+  margin: 1.5rem calc(50% - 40vw) 0;
+}
+
+.ablation-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .sound-video {
   cursor: pointer;
 }

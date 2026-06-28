@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=12">
+  <link rel="stylesheet" href="./static/css/index.css?v=13">
 
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script defer src="./static/js/index.js"></script>
@@ -177,6 +177,25 @@
               <source src="./static/videos/pipeline.mp4" type="video/mp4">
             </video>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">Play2Perfect Enables Rapid Learning of Assembly Tasks</h2>
+          <h2 class="subtitle is-5">
+            Starting from a play-pretrained prior, Play2Perfect learns precise assembly with only
+            sparse rewards&mdash;far faster than training from scratch, which stalls near zero even with
+            the hand-crafted dense reward shaping we designed for it.
+          </h2>
+          <figure class="ablation-figure">
+            <img src="./static/videos/2a.png"
+              alt="Success rate vs. training time on four assembly tasks. Play2Perfect (sparse reward) rapidly reaches high success, while training from scratch with dense or sparse rewards stays near zero.">
+          </figure>
         </div>
       </div>
     </div>
