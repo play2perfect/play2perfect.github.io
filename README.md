@@ -2,6 +2,8 @@
 
 Static project page for `https://play2perfect.github.io`.
 
+<!-- Maintained by the Play2Perfect team. -->
+
 ## Local Preview
 
 Open `index.html` directly in a browser. No build step is required.
