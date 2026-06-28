@@ -195,6 +195,10 @@ a {
   cursor: pointer;
 }
 
+.pipeline-video {
+  max-width: 95%;
+}
+
 .sound-video {
   cursor: pointer;
 }
