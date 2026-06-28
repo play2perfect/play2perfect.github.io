@@ -190,7 +190,8 @@ a {
 }
 
 .showcase-video {
-  max-width: 64%;
+  max-width: 85%;
+  margin: 0 auto;
   cursor: pointer;
 }
 

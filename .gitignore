@@ -2,3 +2,7 @@
 *~
 .DS_Store
 Thumbs.db
+
+# Local-only video build sources (not deployed)
+*.mov
+static/videos/highlight_videos/
