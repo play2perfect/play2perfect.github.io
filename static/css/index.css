@@ -197,6 +197,13 @@ a {
 
 .pipeline-video {
   max-width: 95%;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.pipeline-video video {
+  border-radius: 0;
 }
 
 .sound-video {
