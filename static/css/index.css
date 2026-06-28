@@ -195,6 +195,21 @@ a {
   cursor: pointer;
 }
 
+.speed-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 11;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
 .sound-video {
   cursor: pointer;
 }
