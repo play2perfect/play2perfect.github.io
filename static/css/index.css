@@ -197,12 +197,12 @@ a {
 
 .speed-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 0;
+  right: 0;
   z-index: 11;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.6);
+  padding: 6px 14px;
+  border-radius: 0;
+  background: #000;
   color: #fff;
   font-size: 0.95rem;
   font-weight: 600;
