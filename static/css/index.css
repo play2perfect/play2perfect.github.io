@@ -196,13 +196,19 @@ a {
 }
 
 .pipeline-video {
-  max-width: 95%;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   background: transparent;
   box-shadow: none;
   border-radius: 0;
 }
 
 .pipeline-video video {
+  display: block;
+  width: 100%;
+  height: auto;
   border-radius: 0;
 }
 
