@@ -195,22 +195,6 @@ a {
   cursor: pointer;
 }
 
-.speed-badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 11;
-  padding: 3px 14px;
-  border-radius: 0;
-  background: #fff;
-  color: #000;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 1.9rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  pointer-events: none;
-}
-
 .sound-video {
   cursor: pointer;
 }
