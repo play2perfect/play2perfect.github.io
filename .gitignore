@@ -6,3 +6,4 @@ Thumbs.db
 # Local-only video build sources (not deployed)
 *.mov
 static/videos/highlight_videos/
+static/videos/recovery_videos/

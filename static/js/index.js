@@ -1,3 +1,21 @@
+function setSlowmoSpeed(btn) {
+  var buttons = document.querySelectorAll(".speed-btn");
+  buttons.forEach(function (button) {
+    button.classList.remove("active");
+  });
+  btn.classList.add("active");
+
+  var rate = parseFloat(btn.getAttribute("data-rate"));
+  document.querySelectorAll(".slowmo-video").forEach(function (video) {
+    video.playbackRate = rate;
+  });
+}
+
+function currentSlowmoRate() {
+  var active = document.querySelector(".speed-btn.active");
+  return active ? parseFloat(active.getAttribute("data-rate")) : 1;
+}
+
 function switchAssemblyVideo(btn) {
   var buttons = document.querySelectorAll(".assembly-btn");
   buttons.forEach(function (button) {
@@ -83,7 +101,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   setupSoundOverlay(".showcase-video", "showcase-video", "sound-overlay");
-  setupSoundOverlay(".recovery-video-container", "recovery", "recovery-sound-overlay");
+
+  // Apply (and keep) the selected slow-mo playback rate. playbackRate resets to
+  // 1 whenever a media resource loads, so re-apply it on load/play events too.
+  document.querySelectorAll(".slowmo-video").forEach(function (video) {
+    function applyRate() {
+      video.playbackRate = currentSlowmoRate();
+    }
+    applyRate();
+    video.addEventListener("loadedmetadata", applyRate);
+    video.addEventListener("loadeddata", applyRate);
+    video.addEventListener("play", applyRate);
+  });
 
   var lazyVideos = document.querySelectorAll("video.lazy-video");
 

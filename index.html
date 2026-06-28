@@ -24,10 +24,10 @@
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=13">
+  <link rel="stylesheet" href="./static/css/index.css?v=14">
 
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script defer src="./static/js/index.js"></script>
+  <script defer src="./static/js/index.js?v=2"></script>
 </head>
 
 <body>
@@ -201,11 +201,74 @@
     </div>
   </section>
 
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">Watch Play2Perfect in Slow Speed</h2>
+          <h2 class="subtitle is-5">
+            The policy acts so fast that we slow it down to reveal the precise, contact-rich behavior.
+          </h2>
+          <div class="speed-buttons" role="group" aria-label="Playback speed">
+            <button class="speed-btn" data-rate="1" onclick="setSlowmoSpeed(this)">1&times;</button>
+            <button class="speed-btn active" data-rate="0.5" onclick="setSlowmoSpeed(this)">0.5&times;</button>
+            <button class="speed-btn" data-rate="0.25" onclick="setSlowmoSpeed(this)">0.25&times;</button>
+          </div>
+          <div class="slowmo-grid">
+            <figure class="slowmo-item">
+              <video class="slowmo-video" muted controls loop autoplay playsinline webkit-playsinline preload="auto">
+                <source src="./static/videos/slowmo_tight_insertion.mp4" type="video/mp4">
+              </video>
+              <figcaption>Tight Insertion</figcaption>
+            </figure>
+            <figure class="slowmo-item">
+              <video class="slowmo-video" muted controls loop autoplay playsinline webkit-playsinline preload="auto">
+                <source src="./static/videos/slowmo_multi_part.mp4" type="video/mp4">
+              </video>
+              <figcaption>Multi-Part Assembly</figcaption>
+            </figure>
+            <figure class="slowmo-item">
+              <video class="slowmo-video" muted controls loop autoplay playsinline webkit-playsinline preload="auto">
+                <source src="./static/videos/slowmo_screwing.mp4" type="video/mp4">
+              </video>
+              <figcaption>Screwing</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section recovery-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-2">Recovery Behavior (Sound On 🔊)</h2>
+          <h2 class="subtitle is-5">
+            Even after an initial failure, the policy continues acting closed-loop: continuously retrying until it completes the task.
+          </h2>
+          <div class="recovery-grid">
+            <figure class="recovery-item">
+              <video controls loop playsinline webkit-playsinline preload="metadata">
+                <source src="./static/videos/recovery_1.mp4" type="video/mp4">
+              </video>
+            </figure>
+            <figure class="recovery-item">
+              <video controls loop playsinline webkit-playsinline preload="metadata">
+                <source src="./static/videos/recovery_2.mp4" type="video/mp4">
+              </video>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section assembly-section">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column">
-          <h2 class="title is-2">Assembly Tasks</h2>
+          <h2 class="title is-2">More Rollouts</h2>
           <div class="assembly-buttons">
             <button class="assembly-btn active" data-video="./static/videos/tight_insertion_pair.mp4" onclick="switchAssemblyVideo(this)">
               <img class="assembly-icon" src="./static/images/insert.png" alt="" aria-hidden="true"> Tight Insertion
@@ -223,27 +286,6 @@
           <div class="assembly-video-container">
             <video id="assembly-task-video" controls muted loop playsinline webkit-playsinline preload="metadata" class="lazy-video">
               <source id="assembly-task-source" src="./static/videos/tight_insertion_pair.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section recovery-section">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column">
-          <h2 class="title is-2">Recovery Behavior (Sound On 🔊)</h2>
-          <h2 class="subtitle is-5">
-            Even after an initial failure, the policy continues acting closed-loop: continuously retrying until it completes the task.
-          </h2>
-          <div class="recovery-video-container sound-video">
-            <div class="sound-overlay" id="recovery-sound-overlay">
-              <span class="sound-overlay-text">Turn sound on</span>
-            </div>
-            <video id="recovery" muted controls loop playsinline webkit-playsinline preload="auto">
-              <source src="./static/videos/recovery.mp4" type="video/mp4">
             </video>
           </div>
         </div>
