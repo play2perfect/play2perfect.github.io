@@ -55,7 +55,7 @@ make_seg () {
 
 make_seg 1 tight_insertion_05mm_with_audio.mp4 Tight_Insertion_Blender_Renders.png
 make_seg 2 multi_part_assembl.mp4 MultiPartAssemblyFull_Blender_Renders.png
-make_seg 3 screwing.mp4 Screwing_Blender_Renders.png
+make_seg 3 screwing_final.mp4 Screwing_Blender_Renders.png
 
 cat > "$TMP/concat_list.txt" <<EOF
 file '$TMP/seg_1.mp4'
