@@ -8,8 +8,11 @@
 #
 # Output is exactly 1280x720 (16:9): left panel padded to 484px + right clip 796px.
 # The right clips are bottom-cropped (ih*100/1080) to trim a status bar, then
-# scaled to 720 tall; since the source clips are square, that yields a constant
-# 796px width, so the left panel pad (484) is what pins the total to 1280.
+# scaled to a FIXED 796px wide x 720 tall. Forcing the width (rather than keeping
+# aspect) guarantees every segment is identically sized regardless of whether the
+# source is 720x720 or 1080x1080 (those round to 796 vs 794 otherwise), so the
+# concat is clean and the total is pinned to exactly 1280. The ~0.25% horizontal
+# nudge on the 1080x1080 clips is imperceptible and uniform across segments.
 #
 # Source clips + render PNGs live in static/videos/highlight_videos/, which is
 # gitignored (local-only build sources). Requires ffmpeg on PATH.
@@ -44,7 +47,7 @@ make_seg () {
     "${audio_in[@]}" \
     -filter_complex "\
 [0:v]scale=440:720:force_original_aspect_ratio=decrease,pad=440:720:(ow-iw)/2:(oh-ih)/2:color=white,pad=484:720:0:0:color=white,setsar=1[L];\
-[1:v]crop=in_w:ih-ih*100/1080:0:0,scale=-2:720,setsar=1,fps=30[R];\
+[1:v]crop=in_w:ih-ih*100/1080:0:0,scale=796:720,setsar=1,fps=30[R];\
 [L][R]hstack=inputs=2:shortest=1[v]" \
     -map "[v]" -map "$audio_map" \
     -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 23 -preset slow \
@@ -53,9 +56,10 @@ make_seg () {
   echo "built seg_${idx}.mp4"
 }
 
-make_seg 1 tight_insertion_05mm_with_audio.mp4 Tight_Insertion_Blender_Renders.png
+# Order: screwing -> multi-part assembly -> tight insertion
+make_seg 1 screwing_final.mp4 Screwing_Blender_Renders.png
 make_seg 2 multi_part_assembl.mp4 MultiPartAssemblyFull_Blender_Renders.png
-make_seg 3 screwing_final.mp4 Screwing_Blender_Renders.png
+make_seg 3 tight_insertion_05mm_with_audio.mp4 Tight_Insertion_Blender_Renders.png
 
 cat > "$TMP/concat_list.txt" <<EOF
 file '$TMP/seg_1.mp4'
