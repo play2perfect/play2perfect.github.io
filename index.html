@@ -205,6 +205,27 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column">
+          <h2 class="title is-2">What Matters in Dexterous Play Pretraining?</h2>
+          <h2 class="subtitle is-5">
+            We systematically study four key design choices in play pretraining&mdash;object
+            diversity, training objective, trajectory diversity, and goal precision&mdash;and
+            measure how each affects downstream RL finetuning across four precise-assembly tasks.
+            Consistently, we find that pretraining transfers best when it forces the robot to manipulate objects
+            <strong>in-hand with its fingers</strong>, rather than simply moving them with a fixed grasp.
+          </h2>
+          <figure class="ablation-figure">
+            <img src="./static/videos/pretraining_ablations.png?v=1"
+              alt="Four pretraining ablations, each plotting downstream success rate vs. training time. Object diversity: 1000 objects (ours) beats 100 and 10. Training objective: 6D pose (ours) beats rotation-only and translation-only. Trajectory diversity: random trajectories (ours) beat 100 and 10. Goal precision: 1 cm (ours) beats 5 cm and 10 cm.">
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
           <h2 class="title is-2">Watch Play2Perfect in Slow Speed</h2>
           <h2 class="subtitle is-5">
             Our policy runs so fast that it is easy to miss its reactivity. Here, we slow down each rollout to highlight the micro-recoveries and corrections the policy makes to complete each assembly task.
