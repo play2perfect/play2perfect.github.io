@@ -71,10 +71,13 @@ async function initialize({task,assets,mpr,initialPositionOffset,start}){
  loading(`Loading robot and parts… 0 / ${files.length}`);
  await Promise.all(files.map(async name=>{const r=await fetch(new URL(metadata.asset_sources?.[name]??name,assets));if(!r.ok)throw Error(`Asset ${name}: ${r.status}`);mj.FS.writeFile('/scene/'+name,new Uint8Array(await r.arrayBuffer()));loading(`Loading robot and parts… ${++loaded} / ${files.length}`);}));
  loading('Preparing contacts…');
- model=mj.MjModel.from_xml_path('/scene/scene.xml');data=new mj.MjData(model);if(mpr)model.opt.disableflags|=131072;
+ model=mj.MjModel.from_xml_path('/scene/scene.xml');
+ // Compiled model owns its geometry; release redundant source-file buffers.
+ for(const name of files)mj.FS.unlink('/scene/'+name);
+ data=new mj.MjData(model);if(mpr)model.opt.disableflags|=131072;
  control=new(task==='fabrica'?FabricaControl:AssemblyControl)(mj,model,data,metadata);
  if(fixedStart!==undefined)control.reset(fixedStart);
- ort.env.wasm.numThreads=1;ort.env.wasm.wasmPaths=new URL('./vendor/',import.meta.url).href;
+ ort.env.wasm.numThreads=1;ort.env.wasm.wasmPaths={mjs:new URL('./vendor/ort-wasm-simd-threaded.mjs?v=memory1',import.meta.url).href,wasm:new URL('./vendor/ort-wasm-simd-threaded.wasm',import.meta.url).href};
  const policies=metadata.stages?.map(s=>s.policy)??['policy.onnx'];
  sessions=[];for(const policy of policies){loading(`Loading movement policy… ${sessions.length+1} / ${policies.length}`);sessions.push(await ort.InferenceSession.create(assets+policy,{executionProviders:['wasm']}));}
  resetRnn();ready=true;

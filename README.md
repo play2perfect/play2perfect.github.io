@@ -33,3 +33,14 @@ Serve this checkout with `python3 -m http.server 8767` and open `/interactive/`.
 All required runtime files and four exported policies are included. The optional
 `/diagnostics/browser-check.html` runs fixed-start checks and saves a local report.
 No automatic report upload. Ordinary-laptop and macOS Safari coverage is pending.
+
+### Inference memory limit
+
+The vendored ONNX Runtime1.24.3 loader has a documented local modification:
+its WebAssembly memory maximum is1GiB instead of4GiB (initial allocation remains
+16MiB). The WASM binary and policies are unchanged. Current task inference heaps
+measure about98–142MiB. `scripts/limit_ort_memory.py` reapplies this exact edit to
+an unmodified loader after regeneration. Worker runtime URLs include a version
+query to avoid retaining the old loader in browser caches. Compiled MuJoCo
+models release source-file buffers, and page navigation terminates old workers;
+restoring a cached page reloads its simulation.

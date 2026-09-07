@@ -28,6 +28,9 @@ const sun=new THREE.DirectionalLight(0xffffff,2.5);sun.position.set(1,2,3);scene
 new ResizeObserver(()=>{const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();renderDirty=true;}).observe(host);
 let paused=true,ready=false,control,model,data,metadata,rnnMax=0;
 const worker=new Worker(new URL('./simulation-worker.mjs',import.meta.url),{type:'module'});
+// Do not keep WASM heaps alive in a cached page after task changes/navigation.
+window.addEventListener('pagehide',()=>{worker.terminate();renderer.dispose();});
+window.addEventListener('pageshow',event=>{if(event.persisted)location.reload();});
 const meshes=[];let lastFrame=performance.now(),renderFrames=0,fpsStart=lastFrame,loadMs=0;
 const rateMeter=new SimulationRate();let simulationRate=null;
 function showRate(){
