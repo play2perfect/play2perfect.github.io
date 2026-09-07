@@ -4,7 +4,7 @@ import {loadVisualLod} from './visual-lod.mjs';
 import {OrbitControls} from './vendor/OrbitControls.js';
 const $=id=>document.getElementById(id), host=$('view');
 if(new URLSearchParams(location.search).get('embed')==='1')document.body.classList.add('embedded');
-const tasks={screwing:{title:'Screwing',description:'The trained policy assembles a threaded table leg, then releases it.',detail:'225 mm leg · Trained policy',mpr:true},tight_insertion:{title:'Tight insertion',description:'The trained policy inserts an L-shaped peg into a close-fitting hole, then releases it.',detail:'0.5 mm clearance · Trained policy',mpr:false}};
+const tasks={screwing:{title:'Screwing',description:'The trained policy assembles a threaded table leg, then releases it.',detail:'225 mm leg · Trained policy',mpr:true},tight_insertion:{title:'Tight Insertion',description:'The trained policy inserts an L-shaped peg into a close-fitting hole, then releases it.',detail:'0.5 mm clearance · Trained policy',mpr:false}};
 tasks.fabrica={title:'Multi-Part Assembly',description:'Two trained policies assemble the parts in sequence, keeping both parts free to move.',detail:'3× parts · Two trained policies',mpr:true};
 const taskName=new URLSearchParams(location.search).get('task')??'screwing';
 if(!tasks[taskName])throw Error('Unknown task');
