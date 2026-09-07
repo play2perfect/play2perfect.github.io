@@ -79,7 +79,7 @@ async function initialize({task,assets,mpr,initialPositionOffset,start}){
  if(fixedStart!==undefined)control.reset(fixedStart);
  ort.env.wasm.numThreads=1;ort.env.wasm.wasmPaths={mjs:new URL('./vendor/ort-wasm-simd-threaded.mjs?v=memory1',import.meta.url).href,wasm:new URL('./vendor/ort-wasm-simd-threaded.wasm',import.meta.url).href};
  const policies=metadata.stages?.map(s=>s.policy)??['policy.onnx'];
- sessions=[];for(const policy of policies){loading(`Loading movement policy… ${sessions.length+1} / ${policies.length}`);sessions.push(await ort.InferenceSession.create(assets+policy,{executionProviders:['wasm']}));}
+ sessions=[];for(const policy of policies){loading(`Loading policy… ${sessions.length+1} / ${policies.length}`);sessions.push(await ort.InferenceSession.create(assets+policy,{executionProviders:['wasm']}));}
  resetRnn();ready=true;
  const geometry={ngeom:model.ngeom,goalBodyId:mj.mj_name2id(model,1,'goal_object'),tableBodyId:mj.mj_name2id(model,1,'table'),fixtureBodyId:mj.mj_name2id(model,1,'assembly_fixture'),partIds:['object','second'].map(n=>mj.mj_name2id(model,1,n))};
  for(const field of ['geom_group','geom_type','geom_size','geom_dataid','geom_rgba','geom_bodyid','mesh_vertadr','mesh_vertnum','mesh_faceadr','mesh_facenum','mesh_vert','mesh_face'])geometry[field]=model[field].slice();
