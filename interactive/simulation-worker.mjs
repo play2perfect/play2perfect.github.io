@@ -70,7 +70,7 @@ async function initialize({task,assets,mpr,initialPositionOffset,start}){
  const files=['scene.xml',...Object.keys(metadata.files)];let loaded=0;
  loading(`Loading robot and parts… 0 / ${files.length}`);
  await Promise.all(files.map(async name=>{const r=await fetch(new URL(metadata.asset_sources?.[name]??name,assets));if(!r.ok)throw Error(`Asset ${name}: ${r.status}`);mj.FS.writeFile('/scene/'+name,new Uint8Array(await r.arrayBuffer()));loading(`Loading robot and parts… ${++loaded} / ${files.length}`);}));
- loading('Preparing contacts…');
+ loading('Preparing physics…');
  model=mj.MjModel.from_xml_path('/scene/scene.xml');
  // Compiled model owns its geometry; release redundant source-file buffers.
  for(const name of files)mj.FS.unlink('/scene/'+name);

@@ -43,7 +43,7 @@ function status(){
  $('play').disabled=ended;
  $('play').title=ended?'Press Reset to try again':'';
  $('reset').classList.toggle('restart',ended);
- $('status').textContent=control.succeeded?'Assembly complete · Press Reset to try again':control.failed?'Attempt ended · Press Reset to try again':paused?'Paused · ready to play':control.retract?'Releasing the part…':'Policy running';
+ $('status').textContent=control.succeeded?'Assembly complete · Press Reset to try again':control.failed?'Attempt ended · Press Reset to try again':paused?'Paused · press Play to start':control.retract?'Releasing the part…':'Policy running';
  $('goals').textContent=taskName==='fabrica'?`${control.stageIndex*2+control.successes} / 4 · Part ${control.stageIndex+1}/2`:`${control.successes} / ${control.metadata.goals.length}`;$('time').textContent=`${data.time.toFixed(2)} s`;
  $('distance').textContent=Number.isFinite(control.distance)?`${(control.distance*1000).toFixed(2)} mm`:'—';
 }
