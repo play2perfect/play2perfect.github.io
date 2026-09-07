@@ -1,9 +1,11 @@
+import {describeError} from './error-details.mjs';
 import loadMuJoCo from './vendor/mujoco.js';
 import * as ort from './vendor/ort.wasm.min.mjs';
 import {AssemblyControl,FabricaControl} from './controller.mjs';
 let mj,model,data,control,sessions,h,c,paused=true,single=false,busy=false,epoch=0,timer,deadline=0,ready=false,scheduleVersion=0;
 let fixedStart;
 let releaseControls=0,releaseRemaining=null,completed=false;
+let operation='Starting demo';
 const wake=new MessageChannel();
 wake.port1.onmessage=({data:version})=>{if(version===scheduleVersion)tick();};
 const empty=()=>new ort.Tensor('float32',new Float32Array(1024),[1,1,1024]);
@@ -28,9 +30,10 @@ async function tick(){
  if(busy||!ready||(paused&&!single))return;
  busy=true;single=false;const version=epoch,stage=control.stageIndex??0;
  try{
+  operation='Running movement policy';
   const result=await sessions[stage].run({obs:new ort.Tensor('float32',control.observation(),[1,141]),h_in:h,c_in:c});
   if(version!==epoch)return; // Reset invalidates any inference already in flight.
-  h=result.h_out;c=result.c_out;control.step(result.mu.data);
+  h=result.h_out;c=result.c_out;operation='Stepping simulation';control.step(result.mu.data);
   if((control.stageIndex??0)!==stage)resetRnn();
   if(control.succeeded&&!control.failed){
    // Finish withdrawing the hand with the same actor, RNN and physical state.
@@ -44,11 +47,11 @@ async function tick(){
   if(completed||control.failed)paused=true;
   deadline=Math.max(deadline+1000/60,performance.now()-1000/60);
   emit();
- }catch(error){paused=true;postMessage({type:'error',error:error.stack??String(error)});}
+ }catch(error){paused=true;postMessage({type:'error',error:describeError(error,operation)});}
  finally{busy=false;schedule();}
 }
 async function initialize({task,assets,mpr,initialPositionOffset,start}){
- const loading=label=>postMessage({type:'loading',label});
+ const loading=label=>{operation=label;postMessage({type:'loading',label});};
  loading('Loading task…');
  const response=await fetch(assets+'manifest.json');if(!response.ok)throw Error('Missing scene manifest');const metadata=await response.json();
  fixedStart=start;
@@ -145,5 +148,5 @@ onmessage=async({data:message})=>{
   else if(message.type==='play'){if(!completed&&!control.failed){paused=message.paused;deadline=performance.now();emit();}}
   else if(message.type==='step'){if(!completed&&!control.failed){paused=true;single=true;deadline=performance.now();}}
   schedule();
- }catch(error){postMessage({type:'error',error:error.stack??String(error)});}
+ }catch(error){postMessage({type:'error',error:describeError(error,operation)});}
 };
