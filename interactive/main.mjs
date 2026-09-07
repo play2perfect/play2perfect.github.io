@@ -1,3 +1,4 @@
+import {SimulationRate} from './simulation-rate.mjs';
 import * as THREE from 'three';
 import {loadVisualLod} from './visual-lod.mjs';
 import {OrbitControls} from './vendor/OrbitControls.js';
@@ -28,7 +29,12 @@ new ResizeObserver(()=>{const w=host.clientWidth,h=host.clientHeight;renderer.se
 let paused=true,ready=false,control,model,data,metadata,rnnMax=0;
 const worker=new Worker(new URL('./simulation-worker.mjs',import.meta.url),{type:'module'});
 const meshes=[];let lastFrame=performance.now(),renderFrames=0,fpsStart=lastFrame,loadMs=0;
+const rateMeter=new SimulationRate();let simulationRate=null;
+function showRate(){
+ $('sim-rate').textContent=paused?'Paused':simulationRate===null?'Measuring…':`${simulationRate.toFixed(2)}× real time`;
+}
 function status(){
+ showRate();
  $('play').textContent=paused?'Play':'Pause';
  $('status').textContent=control.succeeded?'Assembly complete · released':control.failed?'Attempt ended · reset to try again':paused?'Paused · ready to play':control.retract?'Releasing the part…':'Policy running';
  $('goals').textContent=taskName==='fabrica'?`${control.stageIndex*2+control.successes} / 4 · Part ${control.stageIndex+1}/2`:`${control.successes} / ${control.metadata.goals.length}`;$('time').textContent=`${data.time.toFixed(2)} s`;
@@ -88,6 +94,7 @@ function draw(){
  orbit.update();renderer.render(scene,camera);
 }
 function frame(now){
+ if(ready){simulationRate=rateMeter.sample(data.time,now,paused,control.resetEpoch);showRate();}
  if(ready&&(!paused||renderDirty)){
   renderDirty=false;draw();
   if(!paused){renderFrames++;if(now-fpsStart>1000){$('fps').textContent=`${Math.round(renderFrames*1000/(now-fpsStart))} fps`;renderFrames=0;fpsStart=now;}}
@@ -103,13 +110,13 @@ function accept(frame){
 }
 let loadFailed=false;
 $('retry').onclick=()=>location.reload();
-function failure(error){loadFailed=true;ready=false;$('status').textContent='Unable to run the demo';$('error').textContent=error;$('retry').hidden=false;for(const id of ['play','step','reset'])$(id).disabled=true;console.error(error);paused=true;}
+function failure(error){$('loading-panel').hidden=false;$('loading-note').textContent=error;$('loading-retry').hidden=false;loadFailed=true;ready=false;$('status').textContent='Unable to run the demo';$('error').textContent=error;$('retry').hidden=false;for(const id of ['play','step','reset'])$(id).disabled=true;console.error(error);paused=true;}
 worker.onerror=event=>failure(event.message);
 worker.onmessage=({data:message})=>{
  if(message.type==='error'){failure(message.error);return;}
  if(message.type==='loading'){if(!loadFailed)$('status').textContent=message.label;return;}
  if(message.type==='ready'){
-  metadata=message.metadata;model=message.model;accept(message.frame);addGeometries();ready=true;
+  metadata=message.metadata;model=message.model;accept(message.frame);addGeometries();ready=true;$('loading-panel').hidden=true;
   loadMs=performance.now()-loadStart;fpsStart=performance.now();
   for(const id of ['play','step','reset'])$(id).disabled=false;
  }else if(message.type==='state')accept(message.frame);
