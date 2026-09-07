@@ -141,7 +141,7 @@ onmessage=async({data:message})=>{
   if(message.type==='settle'){await settle(message.seconds,message.disableRobotContacts===true);return;}
   if(message.type==='reset'){epoch++;paused=true;single=false;releaseRemaining=null;completed=false;const count=control.sequenceMetadata?.initialization_pool?.length??1;
    const index=fixedStart??(count>1?((control.startIndex??0)+1+Math.floor(Math.random()*(count-1)))%count:0);
-   control.reset(index);control.distance=undefined;resetRnn();paused=!message.play;deadline=performance.now();emit();}
+   control.reset(index);control.distance=undefined;resetRnn();emit();}
   else if(message.type==='play'){if(!completed&&!control.failed){paused=message.paused;deadline=performance.now();emit();}}
   else if(message.type==='step'){if(!completed&&!control.failed){paused=true;single=true;deadline=performance.now();}}
   schedule();

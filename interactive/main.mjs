@@ -5,7 +5,7 @@ import {OrbitControls} from './vendor/OrbitControls.js';
 const $=id=>document.getElementById(id), host=$('view');
 if(new URLSearchParams(location.search).get('embed')==='1')document.body.classList.add('embedded');
 const tasks={screwing:{title:'Screwing',description:'The trained policy assembles a threaded table leg, then releases it.',detail:'225 mm leg · Trained policy',mpr:true},tight_insertion:{title:'Tight insertion',description:'The trained policy inserts an L-shaped peg into a close-fitting hole, then releases it.',detail:'0.5 mm clearance · Trained policy',mpr:false}};
-tasks.fabrica={title:'Fabrica assembly',description:'Two trained policies assemble the parts in sequence, keeping both parts free to move.',detail:'3× parts · Two trained policies',mpr:true};
+tasks.fabrica={title:'2-Part Assembly',description:'Two trained policies assemble the parts in sequence, keeping both parts free to move.',detail:'3× parts · Two trained policies',mpr:true};
 const taskName=new URLSearchParams(location.search).get('task')??'screwing';
 if(!tasks[taskName])throw Error('Unknown task');
 const task=tasks[taskName],assets=`./assets/${taskName}/`;
@@ -35,12 +35,16 @@ function showRate(){
 }
 function status(){
  showRate();
- $('play').textContent=control.succeeded||control.failed?'Replay':paused?'Play':'Pause';
- $('status').textContent=control.succeeded?'Assembly complete · Replay to try again':control.failed?'Attempt ended · Replay to try again':paused?'Paused · ready to play':control.retract?'Releasing the part…':'Policy running';
+ const ended=control.succeeded||control.failed;
+ $('play').textContent=paused?'Play':'Pause';
+ $('play').disabled=ended;
+ $('play').title=ended?'Press Reset to try again':'';
+ $('reset').classList.toggle('restart',ended);
+ $('status').textContent=control.succeeded?'Assembly complete · Press Reset to try again':control.failed?'Attempt ended · Press Reset to try again':paused?'Paused · ready to play':control.retract?'Releasing the part…':'Policy running';
  $('goals').textContent=taskName==='fabrica'?`${control.stageIndex*2+control.successes} / 4 · Part ${control.stageIndex+1}/2`:`${control.successes} / ${control.metadata.goals.length}`;$('time').textContent=`${data.time.toFixed(2)} s`;
  $('distance').textContent=Number.isFinite(control.distance)?`${(control.distance*1000).toFixed(2)} mm`:'—';
 }
-$('play').onclick=()=>{if(!ready)return;if(control.succeeded||control.failed){worker.postMessage({type:'reset',play:true});return;}paused=!paused;worker.postMessage({type:'play',paused});status();};
+$('play').onclick=()=>{if(!ready||control.succeeded||control.failed)return;paused=!paused;worker.postMessage({type:'play',paused});status();};
 if(taskName==='fabrica')$('reset').title=new URLSearchParams(location.search).has('start')?'Repeat this starting arrangement':'Try another starting arrangement';
 $('reset').onclick=()=>{if(ready){paused=true;worker.postMessage({type:'reset'});}};
 window.addEventListener('keydown',event=>{if(!ready||event.repeat||event.target.matches('input,select,textarea,button'))return;
