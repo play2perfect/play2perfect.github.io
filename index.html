@@ -24,10 +24,11 @@
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=14">
+  <link rel="stylesheet" href="./static/css/index.css?v=15">
 
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script defer src="./static/js/index.js?v=2"></script>
+  <script defer src="./static/js/interactive-embed.js"></script>
 </head>
 
 <body>
@@ -159,6 +160,31 @@
             </video>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section interactive-section" id="interactive-demo" aria-labelledby="interactive-title">
+    <div class="container is-max-desktop">
+      <div class="has-text-centered">
+        <h2 class="title is-2" id="interactive-title">Try Play2Perfect in Your Browser</h2>
+        <p class="subtitle is-5 interactive-copy">Run the trained policies for screwing, tight insertion, and two-part assembly.
+          Choose a task, press Play, and use Reset to try it again.</p>
+        <p class="interactive-caption">Live MuJoCo simulation · Runs on your computer · No installation</p>
+      </div>
+      <div class="interactive-shell">
+        <div id="interactive-preview" class="interactive-preview">
+          <img src="./static/images/interactive-preview.png" alt="MuJoCo simulation of the robot hand and threaded table leg" loading="lazy" width="1100" height="774">
+          <div class="interactive-launch">
+            <button class="button is-link is-rounded is-medium" id="launch-interactive" type="button">Load interactive demo</button>
+            <p>The scene and policy download when you launch.</p>
+          </div>
+        </div>
+        <div id="interactive-mount"></div>
+      </div>
+      <div class="interactive-links">
+        <a href="./interactive/" target="_blank" rel="noopener">Open in a new tab ↗</a>
+        <button id="close-interactive" class="button is-small is-light" type="button" hidden>Close demo</button>
       </div>
     </div>
   </section>

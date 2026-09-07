@@ -21,3 +21,15 @@ After deployment:
 1. Open `https://play2perfect.github.io`.
 2. In Google Analytics, open `Reports` -> `Realtime`.
 3. Confirm the visit appears for the Play2Perfect property.
+
+## Interactive assembly demo
+
+The demo appears before Key Idea and loads assets only when opened. MuJoCo
+3.8.1 WASM runs CPU physics, ONNX Runtime Web1.24.3 runs exported policies,
+and Three.js renders the scene. Select screwing, tight insertion, or Fabrica.
+Faster rendering reduces robot visual detail without changing simulation.
+
+Serve this checkout with `python3 -m http.server 8767` and open `/interactive/`.
+All required runtime files and four exported policies are included. The optional
+`/diagnostics/browser-check.html` runs fixed-start checks and saves a local report.
+No automatic report upload. Ordinary-laptop and macOS Safari coverage is pending.

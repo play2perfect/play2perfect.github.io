@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Play2Perfect browser check</title>
+<style>body{font:16px system-ui;margin:24px auto;padding:0 20px;max-width:1200px;color:#20333a}button{padding:10px 16px;margin-right:10px;cursor:pointer}iframe{width:100%;height:760px;border:1px solid #cad5dc;margin-top:20px}pre{white-space:pre-wrap;background:#f1f4f5;padding:16px}label{display:inline-block;margin:12px}p{line-height:1.5}</style>
+<h1>Play2Perfect browser check</h1><p>Runs the three saved demo starts, then checks Reset. Keep this tab visible. It can take several minutes and downloads the demo assets. Results stay in this browser; download the report to share it manually. This is a compatibility check, not a calibrated hardware benchmark.</p>
+<button id="run">Run browser checks</button><button id="stop" disabled>Stop</button><button id="save" disabled>Download report</button><label><input id="fast" type="checkbox"> Use Faster rendering</label>
+<p id="status" role="status">Ready.</p><iframe id="demo" title="Demo under test" hidden></iframe><pre id="result">No results yet.</pre>
+<script type="module">
+const $=id=>document.getElementById(id);let report=null,cancelled=false,running=false;
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+function update(){ $('result').textContent=JSON.stringify(report,null,2);$('save').disabled=!report; }
+async function waitFor(fn,timeout=180000){const start=performance.now();while(performance.now()-start<timeout){if(cancelled)throw Error('Stopped by user');const value=fn();if(value)return value;await sleep(100);}throw Error('Timed out waiting for demo');}
+function state(){return $('demo').contentWindow?.demoStatus?.();}
+function equal(a,b){return JSON.stringify(a)===JSON.stringify(b);}
+$('stop').onclick=()=>{cancelled=true;$('demo').src='about:blank';};
+$('save').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)+'\n'],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='play2perfect-browser-check.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('run').onclick=async()=>{
+ if(running)return;running=true;cancelled=false;$('run').disabled=true;$('stop').disabled=false;$('fast').disabled=true;
+ const fast=$('fast').checked;
+ report={started:new Date().toISOString(),userAgent:navigator.userAgent,logicalProcessors:navigator.hardwareConcurrency??null,reportedMemoryGB:navigator.deviceMemory??null,devicePixelRatio,fastRendering:fast,scope:'Full production demo per task at fixed start0, then exact reset. FPS samples are UI estimates; wall time includes this browser and rendering load. No automatic upload.',tasks:[],visibilityInterruptions:0};
+ const visibility=()=>{if(document.hidden)report.visibilityInterruptions++;};document.addEventListener('visibilitychange',visibility);
+ try{
+  for(const task of ['screwing','tight_insertion','fabrica']){
+   $('status').textContent=`Checking ${task}…`;
+   // Remove the previous document before polling readiness for the next task.
+   $('demo').src='about:blank';await waitFor(()=>!state(),10000);
+   $('demo').hidden=false;
+   const url=new URL('../interactive/',location.href);url.searchParams.set('task',task);url.searchParams.set('start','0');if(fast)url.searchParams.set('render','fast');
+   $('demo').src=url.href;
+   await waitFor(()=>{const doc=$('demo').contentDocument,error=doc?.getElementById('error')?.textContent;if(error)throw Error(error);return state()?.ready&&state().task===task;});
+   const initial=state(),doc=$('demo').contentDocument,canvas=doc.querySelector('canvas'),gl=canvas.getContext('webgl2');
+   const ext=gl?.getExtension('WEBGL_debug_renderer_info');
+   const row={task,loadMs:initial.loadMs,graphics:gl?(ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)):null,viewport:[canvas.clientWidth,canvas.clientHeight],fpsSamples:[]};report.tasks.push(row);update();
+   const start=performance.now();doc.getElementById('play').click();
+   let lastSample=0;
+   await waitFor(()=>{const s=state();if(performance.now()-lastSample>=1000){row.fpsSamples.push(doc.getElementById('fps').textContent);lastSample=performance.now();}return s?.succeeded||s?.failed;});
+   const terminal=state();Object.assign(row,{succeeded:terminal.succeeded,failed:terminal.failed,controls:terminal.steps,finalErrorM:terminal.distance,wallMs:performance.now()-start});
+   doc.getElementById('reset').click();await waitFor(()=>state().resetEpoch>terminal.resetEpoch,10000);
+   const reset=state();row.resetExact=['qpos','qvel','targets'].every(k=>equal(reset[k],initial[k]))&&reset.rnnMax===0&&reset.paused&&reset.steps===0&&reset.startIndex===0;
+   update();
+  }
+  report.passed=report.tasks.every(r=>r.succeeded&&!r.failed&&r.resetExact);
+  $('status').textContent=report.passed?'All three tasks and resets passed.':'Checks finished with a failure; see the report.';
+ }catch(error){report.error=String(error);report.passed=false;$('status').textContent=cancelled?'Stopped.':'Check stopped with an error; see the report.';}
+ finally{document.removeEventListener('visibilitychange',visibility);report.finished=new Date().toISOString();update();$('demo').src='about:blank';$('demo').hidden=true;running=false;$('run').disabled=false;$('stop').disabled=true;$('fast').disabled=false;}
+};
+</script></html>
