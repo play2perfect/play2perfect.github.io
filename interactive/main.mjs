@@ -35,17 +35,16 @@ function showRate(){
 }
 function status(){
  showRate();
- $('play').textContent=paused?'Play':'Pause';
- $('status').textContent=control.succeeded?'Assembly complete · released':control.failed?'Attempt ended · reset to try again':paused?'Paused · ready to play':control.retract?'Releasing the part…':'Policy running';
+ $('play').textContent=control.succeeded||control.failed?'Replay':paused?'Play':'Pause';
+ $('status').textContent=control.succeeded?'Assembly complete · Replay to try again':control.failed?'Attempt ended · Replay to try again':paused?'Paused · ready to play':control.retract?'Releasing the part…':'Policy running';
  $('goals').textContent=taskName==='fabrica'?`${control.stageIndex*2+control.successes} / 4 · Part ${control.stageIndex+1}/2`:`${control.successes} / ${control.metadata.goals.length}`;$('time').textContent=`${data.time.toFixed(2)} s`;
  $('distance').textContent=Number.isFinite(control.distance)?`${(control.distance*1000).toFixed(2)} mm`:'—';
 }
-$('play').onclick=()=>{if(ready&&!control.succeeded&&!control.failed){paused=!paused;worker.postMessage({type:'play',paused});status();}};
-$('step').onclick=()=>{if(ready)worker.postMessage({type:'step'});};
+$('play').onclick=()=>{if(!ready)return;if(control.succeeded||control.failed){worker.postMessage({type:'reset',play:true});return;}paused=!paused;worker.postMessage({type:'play',paused});status();};
 if(taskName==='fabrica')$('reset').title=new URLSearchParams(location.search).has('start')?'Repeat this starting arrangement':'Try another starting arrangement';
 $('reset').onclick=()=>{if(ready){paused=true;worker.postMessage({type:'reset'});}};
 window.addEventListener('keydown',event=>{if(!ready||event.repeat||event.target.matches('input,select,textarea,button'))return;
- if(['Space','Backspace','KeyN'].includes(event.code)){event.preventDefault();$(event.code==='Space'?'play':event.code==='KeyN'?'step':'reset').click();}});
+ if(['Space','Backspace'].includes(event.code)){event.preventDefault();$(event.code==='Space'?'play':'reset').click();}});
 const poseAxes=[];
 function makePoseAxes(address=null){
  const group=new THREE.Group();
@@ -133,7 +132,7 @@ function accept(frame){
 }
 let loadFailed=false;
 $('retry').onclick=()=>location.reload();
-function failure(error){$('loading-panel').hidden=false;$('loading-note').textContent=error;$('loading-retry').hidden=false;loadFailed=true;ready=false;$('status').textContent='Unable to run the demo';$('error').textContent=error;$('retry').hidden=false;for(const id of ['play','step','reset'])$(id).disabled=true;console.error(error);paused=true;}
+function failure(error){$('loading-panel').hidden=false;$('loading-note').textContent=error;$('loading-retry').hidden=false;loadFailed=true;ready=false;$('status').textContent='Unable to run the demo';$('error').textContent=error;$('retry').hidden=false;for(const id of ['play','reset'])$(id).disabled=true;console.error(error);paused=true;}
 worker.onerror=event=>failure(event.message);
 worker.onmessage=({data:message})=>{
  if(message.type==='error'){failure(message.error);return;}
@@ -141,7 +140,7 @@ worker.onmessage=({data:message})=>{
  if(message.type==='ready'){
   metadata=message.metadata;model=message.model;accept(message.frame);addGeometries();ready=true;$('loading-panel').hidden=true;
   loadMs=performance.now()-loadStart;fpsStart=performance.now();
-  for(const id of ['play','step','reset'])$(id).disabled=false;
+  for(const id of ['play','reset'])$(id).disabled=false;
  }else if(message.type==='state')accept(message.frame);
 };
 window.demoStatus=()=>({poseAxes:poseAxes.map(({group,address})=>({address,visible:group.visible,position:group.position.toArray(),quaternion:group.quaternion.toArray()})),task:taskName,fastRendering,startIndex:control?.startIndex??0,resetEpoch:control?.resetEpoch??0,stage:control?.stageIndex??0,handoffs:control?.handoffs??[],ready,paused,steps:control?.steps??0,goals:control?.successes??0,succeeded:control?.succeeded??false,failed:control?.failed??false,distance:control?.distance,loadMs,qpos:data?Array.from(data.qpos):[],qvel:data?Array.from(data.qvel):[],targets:control?.targets??[],rnnMax,visibleGoalGeoms:meshes.filter(v=>v.goal&&v.mesh.visible).length});
