@@ -19,7 +19,7 @@ const visualLod=fastRendering?await loadVisualLod(new URL(assets+'visual-lod.jso
 const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));host.prepend(renderer.domElement);
 renderer.setClearColor(0xf0f3f5);renderer.outputColorSpace=THREE.SRGBColorSpace;
 let renderDirty=true;
-$('goal').addEventListener('change',()=>{renderDirty=true;});
+for(const id of ['goal','axes'])$(id).addEventListener('change',()=>{renderDirty=true;});
 const scene=new THREE.Scene();scene.background=new THREE.Color(0xf0f3f5);scene.up.set(0,0,1);
 const camera=new THREE.PerspectiveCamera(42,1,.01,20);camera.up.set(0,0,1);camera.position.set(.7,-1.0,1.0);
 const orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,0,.63);orbit.update();orbit.addEventListener('change',()=>{renderDirty=true;});
@@ -46,7 +46,29 @@ if(taskName==='fabrica')$('reset').title=new URLSearchParams(location.search).ha
 $('reset').onclick=()=>{if(ready){paused=true;worker.postMessage({type:'reset'});}};
 window.addEventListener('keydown',event=>{if(!ready||event.repeat||event.target.matches('input,select,textarea,button'))return;
  if(['Space','Backspace','KeyN'].includes(event.code)){event.preventDefault();$(event.code==='Space'?'play':event.code==='KeyN'?'step':'reset').click();}});
+const poseAxes=[];
+function makePoseAxes(address=null){
+ const group=new THREE.Group();
+ for(const [direction,color] of [[[1,0,0],0xff3030],[[0,1,0],0x20bb40],[[0,0,1],0x3070ff]]){
+  const arrow=new THREE.ArrowHelper(new THREE.Vector3(...direction),new THREE.Vector3(),.07,color,.014,.007);
+  // Frame origins can be inside the part: keep all three directions readable.
+  for(const mesh of [arrow.line,arrow.cone]){mesh.material.depthTest=false;mesh.material.depthWrite=false;mesh.renderOrder=10;}
+  group.add(arrow);
+ }
+ group.visible=false;scene.add(group);poseAxes.push({group,address});
+}
+function updatePoseAxes(){
+ for(const {group,address} of poseAxes){
+  const goal=address===null;
+  group.visible=$('axes').checked&&(!goal||$('goal').checked);
+  if(goal){group.position.fromArray(control.goal);group.quaternion.fromArray(control.goal,3);}
+  else {group.position.fromArray(data.qpos,address);group.quaternion.set(data.qpos[address+4],data.qpos[address+5],data.qpos[address+6],data.qpos[address+3]);}
+ }
+}
 function addGeometries(){
+ const addresses=metadata.stages?.map(s=>s.object_qpos_address)??[metadata.object_qpos_address??29];
+ for(const address of [...new Set(addresses)])makePoseAxes(address);
+ makePoseAxes();
  for(let i=0;i<model.ngeom;i++){
   const isGoal=model.geom_bodyid[i]===model.goalBodyId;
   if(model.geom_group[i]>=3||(taskName==='fabrica'&&isGoal))continue;
@@ -80,6 +102,7 @@ function addGeometries(){
  }
 }
 function draw(){
+ updatePoseAxes();
  let ghostTransform;
  if(taskName==='fabrica'){
   const goal=control.goal,a=control.metadata.object_qpos_address;
@@ -121,7 +144,7 @@ worker.onmessage=({data:message})=>{
   for(const id of ['play','step','reset'])$(id).disabled=false;
  }else if(message.type==='state')accept(message.frame);
 };
-window.demoStatus=()=>({task:taskName,fastRendering,startIndex:control?.startIndex??0,resetEpoch:control?.resetEpoch??0,stage:control?.stageIndex??0,handoffs:control?.handoffs??[],ready,paused,steps:control?.steps??0,goals:control?.successes??0,succeeded:control?.succeeded??false,failed:control?.failed??false,distance:control?.distance,loadMs,qpos:data?Array.from(data.qpos):[],qvel:data?Array.from(data.qvel):[],targets:control?.targets??[],rnnMax,visibleGoalGeoms:meshes.filter(v=>v.goal&&v.mesh.visible).length});
+window.demoStatus=()=>({poseAxes:poseAxes.map(({group,address})=>({address,visible:group.visible,position:group.position.toArray(),quaternion:group.quaternion.toArray()})),task:taskName,fastRendering,startIndex:control?.startIndex??0,resetEpoch:control?.resetEpoch??0,stage:control?.stageIndex??0,handoffs:control?.handoffs??[],ready,paused,steps:control?.steps??0,goals:control?.successes??0,succeeded:control?.succeeded??false,failed:control?.failed??false,distance:control?.distance,loadMs,qpos:data?Array.from(data.qpos):[],qvel:data?Array.from(data.qvel):[],targets:control?.targets??[],rnnMax,visibleGoalGeoms:meshes.filter(v=>v.goal&&v.mesh.visible).length});
 const startParam=new URLSearchParams(location.search).get('start');
 worker.postMessage({type:'init',start:startParam===null?undefined:Number(startParam),task:taskName,assets:new URL(assets,location.href).href,mpr:task.mpr});
 requestAnimationFrame(frame);
