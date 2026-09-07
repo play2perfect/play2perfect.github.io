@@ -576,3 +576,10 @@ a {
   #interactive-mount iframe { height: 1000px; }
   .interactive-caption { font-size: .85rem; }
 }
+
+.interactive-phone-label { display: none; }
+@media (max-width: 767px) {
+  .interactive-desktop-label { display: none; }
+  .interactive-phone-label { display: inline; }
+  .interactive-launch .button { font-size: 1rem; }
+}

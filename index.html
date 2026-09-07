@@ -24,11 +24,11 @@
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=15">
+  <link rel="stylesheet" href="./static/css/index.css?v=16">
 
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script defer src="./static/js/index.js?v=2"></script>
-  <script defer src="./static/js/interactive-embed.js"></script>
+  <script defer src="./static/js/interactive-embed.js?v=2"></script>
 </head>
 
 <body>
@@ -176,8 +176,8 @@
         <div id="interactive-preview" class="interactive-preview">
           <img src="./static/images/interactive-preview.png" alt="MuJoCo simulation of the robot hand and threaded table leg" loading="lazy" width="1100" height="774">
           <div class="interactive-launch">
-            <button class="button is-link is-rounded is-medium" id="launch-interactive" type="button">Load interactive demo</button>
-            <p>The scene and policy download when you launch.</p>
+            <a class="button is-link is-rounded is-medium" id="launch-interactive" href="./interactive/" target="_blank" rel="noopener"><span class="interactive-desktop-label">Load interactive demo</span><span class="interactive-phone-label">Open demo in a new tab ↗</span></a>
+            <p>Takes ~10 seconds to load, depending on your connection and device.</p>
           </div>
         </div>
         <div id="interactive-mount"></div>

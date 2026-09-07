@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const close = document.getElementById('close-interactive');
   const preview = document.getElementById('interactive-preview');
   const mount = document.getElementById('interactive-mount');
-  launch.addEventListener('click', () => {
+  launch.addEventListener('click', event => {
+    if (window.matchMedia('(max-width: 767px)').matches) return;
+    event.preventDefault();
     if (mount.firstChild) return;
     document.querySelectorAll('video').forEach(video => video.pause());
     const frame = document.createElement('iframe');
