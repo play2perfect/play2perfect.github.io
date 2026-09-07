@@ -9,7 +9,7 @@ tasks.fabrica={title:'Fabrica assembly',description:'Two trained policies assemb
 const taskName=new URLSearchParams(location.search).get('task')??'screwing';
 if(!tasks[taskName])throw Error('Unknown task');
 const task=tasks[taskName],assets=`./assets/${taskName}/`;
-$('task').value=taskName;$('task-title').textContent=task.title;$('task-description').textContent=task.description+' Physics and policy inference run on your computer.';$('task-detail').textContent=task.detail+'';
+$('task').value=taskName;$('task-title').textContent=task.title;$('task-description').textContent=task.description;$('task-detail').textContent=task.detail+'';
 $('task').onchange=()=>{const url=new URL(location.href);url.searchParams.set('task',$('task').value);url.searchParams.delete('start');location.href=url.href;};
 
 const fastRendering=new URLSearchParams(location.search).get('render')==='fast';
