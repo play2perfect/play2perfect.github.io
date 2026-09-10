@@ -7,3 +7,4 @@ Thumbs.db
 *.mov
 static/videos/highlight_videos/
 static/videos/recovery_videos/
+diagnostics/reset-check.html

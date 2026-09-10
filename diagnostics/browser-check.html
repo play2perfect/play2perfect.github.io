@@ -31,7 +31,7 @@ $('run').onclick=async()=>{
    const row={task,loadMs:initial.loadMs,graphics:gl?(ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)):null,viewport:[canvas.clientWidth,canvas.clientHeight],fpsSamples:[]};report.tasks.push(row);update();
    const start=performance.now();doc.getElementById('play').click();
    let lastSample=0;
-   await waitFor(()=>{const s=state();if(performance.now()-lastSample>=1000){row.fpsSamples.push(doc.getElementById('fps').textContent);lastSample=performance.now();}return s?.succeeded||s?.failed;});
+   await waitFor(()=>{const s=state();if(performance.now()-lastSample>=1000){row.fpsSamples.push(s?.fps??null);lastSample=performance.now();}return s?.succeeded||s?.failed;});
    const terminal=state();Object.assign(row,{succeeded:terminal.succeeded,failed:terminal.failed,controls:terminal.steps,finalErrorM:terminal.distance,wallMs:performance.now()-start});
    doc.getElementById('reset').click();await waitFor(()=>state().resetEpoch>terminal.resetEpoch,10000);
    const reset=state();row.resetExact=['qpos','qvel','targets'].every(k=>equal(reset[k],initial[k]))&&reset.rnnMax===0&&reset.paused&&reset.steps===0&&reset.startIndex===0;
