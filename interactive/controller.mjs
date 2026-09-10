@@ -33,6 +33,25 @@ export class AssemblyControl {
   this.successes=0;this.near=0;this.episode=0;this.retract=false;this.succeeded=false;this.failed=false;this.steps=0;
   this.setGoal();this.mj.mj_forward(this.model,this.data);
  }
+ // Restart task progress around a new part pose without resetting the robot.
+ randomize(offsets){
+  const d=this.data,m=this.model;
+  const saved={qpos:d.qpos.slice(),qvel:d.qvel.slice(),ctrl:d.ctrl.slice(),act:d.act.slice(),time:d.time,targets:this.targets.slice()};
+  this.reset(this.startIndex??0);
+  const initial=d.qpos.slice();
+  d.qpos.set(saved.qpos);d.qvel.set(saved.qvel);d.ctrl.set(saved.ctrl);d.act.set(saved.act);d.time=saved.time;this.targets=saved.targets;
+  const addresses=this.sequenceMetadata?.stages.map(s=>s.object_qpos_address)??[this.metadata.object_qpos_address??29];
+  addresses.forEach((a,i)=>{
+   const [dx,dy,yaw]=offsets[i],c=Math.cos(yaw/2),s=Math.sin(yaw/2);
+   const [w,x,y,z]=initial.slice(a+3,a+7);
+   d.qpos.set([initial[a]+dx,initial[a+1]+dy,initial[a+2],c*w-s*z,c*x-s*y,c*y+s*x,c*z+s*w],a);
+   const joint=Array.from(m.jnt_qposadr).indexOf(a);
+   if(joint<0||m.jnt_type[joint]!==0)throw Error('Randomized part must have a free joint');
+   const v=m.jnt_dofadr[joint];d.qvel.fill(0,v,v+6);
+  });
+  d.qacc_warmstart.fill(0);this.distance=undefined;
+  this.mj.mj_forward(m,d);
+ }
  setGoal(){
   this.goal=this.metadata.goals[Math.min(this.successes,this.metadata.goals.length-1)];
   this.data.mocap_pos.set(this.goal.slice(0,3),3*this.goalId);

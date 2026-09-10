@@ -50,6 +50,7 @@ function status(){
 $('play').onclick=()=>{if(!ready||control.succeeded||control.failed)return;paused=!paused;worker.postMessage({type:'play',paused});status();};
 if(taskName==='fabrica')$('reset').title=new URLSearchParams(location.search).has('start')?'Repeat this starting arrangement':'Try another starting arrangement';
 $('reset').onclick=()=>{if(ready){paused=true;worker.postMessage({type:'reset'});}};
+$('randomize').onclick=()=>{if(ready)worker.postMessage({type:'randomize'});};
 window.addEventListener('keydown',event=>{if(!ready||event.repeat||event.target.matches('input,select,textarea,button'))return;
  if(['Space','Backspace'].includes(event.code)){event.preventDefault();$(event.code==='Space'?'play':'reset').click();}});
 const poseAxes=[];
@@ -139,7 +140,7 @@ function accept(frame){
 }
 let loadFailed=false;
 $('retry').onclick=()=>location.reload();
-function failure(error){$('loading-panel').hidden=false;$('loading-note').textContent=error;$('loading-retry').hidden=false;loadFailed=true;ready=false;$('status').textContent='Unable to run the demo';$('error').textContent=error;$('retry').hidden=false;for(const id of ['play','reset'])$(id).disabled=true;console.error(error);paused=true;}
+function failure(error){$('loading-panel').hidden=false;$('loading-note').textContent=error;$('loading-retry').hidden=false;loadFailed=true;ready=false;$('status').textContent='Unable to run the demo';$('error').textContent=error;$('retry').hidden=false;for(const id of ['play','reset','randomize'])$(id).disabled=true;console.error(error);paused=true;}
 worker.onerror=event=>failure(event.message);
 worker.onmessage=({data:message})=>{
  if(message.type==='error'){failure(message.error);return;}
@@ -147,7 +148,7 @@ worker.onmessage=({data:message})=>{
  if(message.type==='ready'){
   metadata=message.metadata;model=message.model;accept(message.frame);addGeometries();ready=true;$('loading-panel').hidden=true;
   loadMs=performance.now()-loadStart;fpsStart=performance.now();
-  for(const id of ['play','reset'])$(id).disabled=false;
+  for(const id of ['play','reset','randomize'])$(id).disabled=false;
  }else if(message.type==='state')accept(message.frame);
 };
 window.demoStatus=()=>({poseAxes:poseAxes.map(({group,address})=>({address,visible:group.visible,position:group.position.toArray(),quaternion:group.quaternion.toArray()})),task:taskName,fastRendering,startIndex:control?.startIndex??0,resetEpoch:control?.resetEpoch??0,stage:control?.stageIndex??0,handoffs:control?.handoffs??[],ready,paused,steps:control?.steps??0,goals:control?.successes??0,succeeded:control?.succeeded??false,failed:control?.failed??false,distance:control?.distance,loadMs,qpos:data?Array.from(data.qpos):[],qvel:data?Array.from(data.qvel):[],targets:control?.targets??[],rnnMax,visibleGoalGeoms:meshes.filter(v=>v.goal&&v.mesh.visible).length});

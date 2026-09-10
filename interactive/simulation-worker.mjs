@@ -148,6 +148,14 @@ onmessage=async({data:message})=>{
   if(message.type==='reset'){epoch++;paused=true;single=false;releaseRemaining=null;completed=false;const count=control.sequenceMetadata?.initialization_pool?.length??1;
    const index=fixedStart??(count>1?((control.startIndex??0)+1+Math.floor(Math.random()*(count-1)))%count:0);
    control.reset(index);control.distance=undefined;resetRnn();emit();}
+  else if(message.type==='randomize'){
+   const count=control.sequenceMetadata?.stages.length??1;
+   // Optional explicit offsets support reproducible local experiments.
+   const offsets=message.offsets??Array.from({length:count},()=>[(Math.random()*2-1)*.01,(Math.random()*2-1)*.01,(Math.random()*2-1)*Math.PI/18]);
+   if(!Array.isArray(offsets)||offsets.length!==count||offsets.some(a=>!Array.isArray(a)||a.length!==3||a.some((v,i)=>!Number.isFinite(v)||Math.abs(v)>(i===2?Math.PI/18:.01)+1e-12)))throw Error('Invalid randomization offsets');
+   epoch++;single=false;releaseRemaining=null;completed=false;
+   control.randomize(offsets);resetRnn();deadline=performance.now();emit();
+  }
   else if(message.type==='play'){if(!completed&&!control.failed){paused=message.paused;deadline=performance.now();emit();}}
   else if(message.type==='step'){if(!completed&&!control.failed){paused=true;single=true;deadline=performance.now();}}
   schedule();
