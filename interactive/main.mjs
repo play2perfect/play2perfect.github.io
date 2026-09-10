@@ -6,6 +6,8 @@ const $=id=>document.getElementById(id), host=$('view');
 if(new URLSearchParams(location.search).get('embed')==='1')document.body.classList.add('embedded');
 const tasks={screwing:{title:'Screwing',description:'The trained policy assembles a threaded table leg, then releases it.',detail:'225 mm leg · Trained policy',mpr:true},tight_insertion:{title:'Tight Insertion',description:'The trained policy inserts an L-shaped peg into a close-fitting hole, then releases it.',detail:'0.5 mm clearance · Trained policy',mpr:false}};
 tasks.fabrica={title:'Multi-Part Assembly',description:'Two trained policies assemble the parts in sequence, keeping both parts free to move.',detail:'3× parts · Two trained policies',mpr:true};
+tasks.plug={title:'iPhone Charger into Socket',description:'The trained policy plugs a real-size power adapter into a power board, then releases it.',detail:'0.5 mm socket clearance · Trained policy',mpr:true};
+tasks.fork={title:'YCB Fork in Rack',description:'The trained policy slides a real-size YCB fork, handle first, into a rack, then releases it.',detail:'1 mm slot clearance · Trained policy',mpr:true};
 const taskName=new URLSearchParams(location.search).get('task')??'screwing';
 if(!tasks[taskName])throw Error('Unknown task');
 const task=tasks[taskName],assets=`./assets/${taskName}/`;
@@ -96,10 +98,14 @@ function addGeometries(){
   const material=new THREE.MeshStandardMaterial({color:new THREE.Color(...rgba.slice(0,3)),roughness:.55,metalness:.1,transparent:rgba[3]<1,opacity:rgba[3],depthWrite:rgba[3]>=1});
   // Presentation palette only: MuJoCo geoms and contact parameters are untouched.
   const body=model.geom_bodyid[i];
-  const palette=taskName==='screwing'?{part:'#eeeae2',fixture:'#858d94'}:{part:'#c7353b',fixture:taskName==='fabrica'?'#c7353b':'#eeede8'};
+  const palette=taskName==='screwing'?{part:'#eeeae2',fixture:'#858d94'}:taskName==='plug'?{part:'#f2f2f0',fixture:'#4a4f55'}:taskName==='fork'?{part:'#d3d8dd',fixture:'#858d94'}:taskName==='tight_insertion'?{part:'#5fb8e6',fixture:'#eeede8'}:{part:'#c7353b',fixture:taskName==='fabrica'?'#c7353b':'#eeede8'};
   if(body===model.tableBodyId){material.color.set('#b58a60');material.roughness=.85;material.metalness=0;}
   else if(body===model.fixtureBodyId){material.color.set(palette.fixture);material.roughness=.7;material.metalness=0;}
   else if(model.partIds.includes(body)){material.color.set(palette.part);material.roughness=.6;material.metalness=0;}
+  // Per-geom PBR materials exported from the source GLB (manifest.visual_materials, keyed by geom index)
+  // override the palette so the browser matches the simulator's look.
+  const pbr=metadata.visual_materials?.[i];
+  if(pbr&&!isGoal){material.color.setRGB(rgba[0],rgba[1],rgba[2]);material.metalness=Math.min(pbr.metalness,.85);material.roughness=pbr.roughness;}
   const mesh=new THREE.Mesh(geometry,material);scene.add(mesh);meshes.push({mesh,id:i,goal:isGoal});
   if(taskName==='fabrica'){
    const partIds=model.partIds;
