@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {loadVisualLod} from './visual-lod.mjs?v=8';
+import {loadVisualLod} from './visual-lod.mjs?v=9';
 import {OrbitControls} from './vendor/OrbitControls.js';
 const $=id=>document.getElementById(id), host=$('view');
 if(new URLSearchParams(location.search).get('embed')==='1')document.body.classList.add('embedded');
@@ -35,7 +35,7 @@ new ResizeObserver(()=>{const w=host.clientWidth,h=host.clientHeight;renderer.se
  if(!framed&&w>0&&h>0){framed=true;camera.position.copy(VIEW_TARGET).addScaledVector(VIEW_DIRECTION,VIEW_DISTANCE*(w<h?1.3:1));orbit.update();}
  renderDirty=true;}).observe(host);
 let paused=true,ready=false,control,model,data,metadata,rnnMax=0,resetArrangements=0,stepMs=0,resetSource='none',resetIndex=-1;
-const worker=new Worker(new URL('./simulation-worker.mjs?v=8',import.meta.url),{type:'module'});
+const worker=new Worker(new URL('./simulation-worker.mjs?v=9',import.meta.url),{type:'module'});
 // Do not keep WASM heaps alive in a cached page after task changes/navigation.
 window.addEventListener('pagehide',()=>{worker.terminate();renderer.dispose();});
 window.addEventListener('pageshow',event=>{if(event.persisted)location.reload();});

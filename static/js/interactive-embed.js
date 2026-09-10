@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mount.firstChild) return;
     document.querySelectorAll('video').forEach(video => video.pause());
     const frame = document.createElement('iframe');
-    frame.src = './interactive/?embed=1&v=7'; // Bump with the demo build; a cached iframe is otherwise never revalidated.
+    frame.src = './interactive/?embed=1&v=8'; // Bump with the demo build; a cached iframe is otherwise never revalidated.
     frame.title = 'Interactive Play2Perfect assembly simulation';
     frame.allowFullscreen = true;
     mount.appendChild(frame);

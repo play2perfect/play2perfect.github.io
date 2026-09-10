@@ -1,7 +1,7 @@
-import {describeError} from './error-details.mjs?v=8';
+import {describeError} from './error-details.mjs?v=9';
 import loadMuJoCo from './vendor/mujoco.js';
 import * as ort from './vendor/ort.wasm.min.mjs';
-import {AssemblyControl,FabricaControl} from './controller.mjs?v=8';
+import {AssemblyControl,FabricaControl} from './controller.mjs?v=9';
 let mj,model,data,control,sessions,h,c,paused=true,single=false,busy=false,epoch=0,timer,deadline=0,ready=false,scheduleVersion=0;
 let fixedStart;
 let releaseControls=0,releaseRemaining=null,completed=false;
@@ -11,7 +11,7 @@ let sceneMetadata,disturbRemaining=0,disturbBody=-1,disturbScale=1,stepMs=0;
 // SPIN are the velocity change the part would take on if it were free; a firm
 // grasp absorbs most of it, so these run well above a free-body nudge. Each
 // disturbance draws a fraction of that ceiling, from a light tap to a full shove.
-const DISTURB_CONTROLS=5,DISTURB_SPEED=4,DISTURB_SPIN=30,DISTURB_MIN=.15;
+const DISTURB_CONTROLS=5,DISTURB_SPEED=1,DISTURB_SPIN=7.5,DISTURB_MIN=.15;
 // Reset scatters the parts and the fixture over the table top, so each attempt
 // looks different. Goals ride with the fixture; footprints never overlap.
 const RESET_FIXTURE_YAW=.175,RESET_CLEARANCE_M=.03,RESET_TRIES=80;
